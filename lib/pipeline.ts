@@ -17,7 +17,7 @@ export default class PipelineConstruct extends Construct {
     .teams();
   
     blueprints.CodePipelineStack.builder()
-      .name("eks-blueprints-workshop-pipeline")
+      .name("eks-blueprint-workshop-pipeline")
       .owner("rlozanoc")
       .repository({
           repoUrl: 'my-eks-blueprints',
@@ -28,8 +28,7 @@ export default class PipelineConstruct extends Construct {
         id: "envs",
         stages: [
           { id: "dev", stackBuilder: blueprint.clone('us-west-2')},
-          { id: "test", stackBuilder: blueprint.clone('us-east-2')},
-          { id: "prod", stackBuilder: blueprint.clone('us-west-1')}
+          { id: "test", stackBuilder: blueprint.clone('us-east-2')}
         ]
       })
       .build(scope, id+'-stack', props);
