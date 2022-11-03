@@ -2,6 +2,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as blueprints from '@aws-quickstart/eks-blueprints';
+import { KubecostAddOn } from '@kubecost/kubecost-eks-blueprints-addon';
 import { TeamPlatform, TeamApplication } from '../teams'; // HERE WE IMPORT TEAMS
 
 
@@ -11,11 +12,14 @@ export default class PipelineConstruct extends Construct {
 
     const account = props?.env?.account!;
     const region = props?.env?.region!;
+    
+    const addOnKubecost = new KubecostAddOn();
 
     const blueprint = blueprints.EksBlueprint.builder()
     .account(account)
     .region(region)
-    .addOns(new blueprints.ClusterAutoScalerAddOn)
+    .addOns(new blueprints.ClusterAutoScalerAddOn,
+            addOnKubecost)
     .teams(new TeamPlatform(account), new TeamApplication('burnham',account)); // HERE WE ADD THE TEAMS
   
     blueprints.CodePipelineStack.builder()
