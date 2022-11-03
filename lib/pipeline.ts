@@ -14,12 +14,14 @@ export default class PipelineConstruct extends Construct {
     const region = props?.env?.region!;
     
     const addOnKubecost = new KubecostAddOn();
+    const addOnAWSLBC = new blueprints.AwsLoadBalancerControllerAddOn();
 
     const blueprint = blueprints.EksBlueprint.builder()
     .account(account)
     .region(region)
     .addOns(new blueprints.ClusterAutoScalerAddOn,
-            addOnKubecost)
+            addOnKubecost,
+            addOnAWSLBC)
     .teams(new TeamPlatform(account), new TeamApplication('burnham',account)); // HERE WE ADD THE TEAMS
   
     blueprints.CodePipelineStack.builder()
